@@ -3,13 +3,13 @@
 
 from django.conf.urls.defaults import *
 from .views import receive, outbox, delivered, console, summary, can_send
-from django.contrib.admin.views.decorators import staff_member_required
+#from django.contrib.admin.views.decorators import staff_member_required
 
 urlpatterns = patterns("",
    ("^router/receive", receive),
    ("^router/outbox", outbox),
    ("^router/delivered", delivered),
    ("^router/can_send/(?P<message_id>\d+)/", can_send),
-   ("^router/console", staff_member_required(console), {}, 'httprouter-console'),
+   ("^router/console", console),
    ("^router/summary", summary),
 )
