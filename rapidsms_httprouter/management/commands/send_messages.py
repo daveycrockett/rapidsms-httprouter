@@ -52,7 +52,7 @@ class Command(BaseCommand, LoggerMixin):
             if backend_name in router_dict:
                 router_url = router_dict[backend_name]
 
-            # if not, look for a default backend 
+            # if not, look for a default backend
             elif 'default' in router_dict:
                 router_url = router_dict['default']
 
@@ -70,7 +70,7 @@ class Command(BaseCommand, LoggerMixin):
     def send_backend_chunk(self, router_url, pks, backend_name):
         msgs = Message.objects.using(self.db).filter(pk__in=pks).exclude(connection__identity__iregex="[a-z]")
         try:
-            url = self.build_send_url(router_url, backend_name, ' '.join(msgs.values_list('connection__identity', flat=True)), msgs[0].text)
+            url = self.build_send_url(router_url, backend_name, ','.join(msgs.values_list('connection__identity', flat=True)), msgs[0].text)
             status_code = self.fetch_url(url)
 
             # kannel likes to send 202 responses, really any
@@ -114,7 +114,7 @@ class Command(BaseCommand, LoggerMixin):
 
         """
         DBS = settings.DATABASES.keys()
-        #DBS.remove('default') # skip the dummy -we now check default DB as well
+        # DBS.remove('default') # skip the dummy -we now check default DB as well
         CHUNK_SIZE = getattr(settings, 'MESSAGE_CHUNK_SIZE', 400)
         self.info("starting up")
         recipients = getattr(settings, 'ADMINS', None)
